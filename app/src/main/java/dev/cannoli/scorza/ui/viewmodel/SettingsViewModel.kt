@@ -913,6 +913,7 @@ class SettingsViewModel @Inject constructor(
         "retroachievements" -> buildList {
             add(SettingsItem("ra_username", R.string.setting_ra_username, valueText = settings.raUsername.ifEmpty { null }, valueRes = if (settings.raUsername.isEmpty()) R.string.value_not_set else null, isEditable = true))
             add(SettingsItem("ra_password", R.string.setting_ra_password, valueText = if (raPassword.isEmpty()) null else BULLET.repeat(raPassword.length), valueRes = if (raPassword.isEmpty()) R.string.value_not_set else null, isEditable = true))
+            add(SettingsItem("ra_server_url", R.string.settings_retroachievements, labelText = "Server URL", valueText = settings.raBaseUrl, isEditable = true, canCycle = false))
             if (settings.raUsername.isNotEmpty() && raPassword.isNotEmpty()) {
                 add(SettingsItem("ra_login", R.string.setting_ra_login, isEditable = true))
             }
