@@ -940,6 +940,7 @@ class LibretroActivity : ComponentActivity(), LauncherSettingsHost {
                     lateinit var ra: RetroAchievementsManager
                     ra = RetroAchievementsManager(
                         context = activity,
+                        baseUrlProvider = { settings.raBaseUrl },
                         cacheDir = java.io.File(cacheDir, "ra_cache"),
                         offlineDir = dev.cannoli.scorza.config.CannoliPaths(settings.sdCardRoot).configRaOffline,
                         onEvent = { _, title, _, _ ->
