@@ -127,7 +127,10 @@ class RaPreloadController @Inject constructor(
         return act.isFinishing || act.isDestroyed
     }
 
-    private fun client() = RaConnectClient(userAgent = "Cannoli/${BuildConfig.VERSION_NAME}")
+    private fun client() = RaConnectClient(
+        baseUrlProvider = { settings.raBaseUrl },
+        userAgent = "Cannoli/${BuildConfig.VERSION_NAME}"
+    )
 
     private fun messageFor(result: RaOfflinePreloader.Result): String = when (result) {
         is RaOfflinePreloader.Result.Success -> context.resources.getQuantityString(
