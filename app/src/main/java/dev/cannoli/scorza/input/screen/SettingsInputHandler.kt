@@ -164,6 +164,12 @@ class SettingsInputHandler @Inject constructor(
                     gameName = "ra_password",
                     keyboard = KeyboardState(text = settingsViewModel.raPassword, cursorPos = settingsViewModel.raPassword.length)
                 )
+            }   
+            "ra_server_url" -> {
+                nav.dialogState.value = DialogState.RenameInput(
+                    gameName = "ra_server_url",
+                    currentName = settings.raBaseUrl
+                )
             }
             "ra_login" -> activityActions.startRaLogin(settings.raUsername, settingsViewModel.raPassword)
             "romm_host" -> {
