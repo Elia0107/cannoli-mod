@@ -166,9 +166,10 @@ class SettingsInputHandler @Inject constructor(
                 )
             }   
             "ra_server_url" -> {
+                val current = settings.raBaseUrl
                 nav.dialogState.value = DialogState.RenameInput(
                     gameName = "ra_server_url",
-                    currentName = settings.raBaseUrl
+                    keyboard = KeyboardState(text = current, cursorPos = current.length)
                 )
             }
             "ra_login" -> activityActions.startRaLogin(settings.raUsername, settingsViewModel.raPassword)
