@@ -269,7 +269,13 @@ class RetroAchievementsManager(
                 val key = cacheKey(postData)
                 var conn: HttpURLConnection? = null
                 try {
-                    conn = URL(url).openConnection() as HttpURLConnection
+                    val originalUrl = URL(url)
+                    val baseUrl = baseUrlProvider().trimEnd('/')
+                    val requestPath = originalUrl.path.trimStart('/') +
+                        (originalUrl.query?.let { "?$it" } ?: "")
+                    val targetUrl = URL("$baseUrl/$requestPath")
+                    
+                    conn = targetUrl.openConnection() as HttpURLConnection
                     conn.connectTimeout = 10_000
                     conn.readTimeout = 10_000
                     conn.setRequestProperty("User-Agent", userAgent)
