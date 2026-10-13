@@ -356,6 +356,19 @@ class SettingsRepository @Inject constructor(@ApplicationContext private val con
             editor.apply()
         }
 
+    var raBaseUrl: String
+    get() = jsonRead {
+        optString(KEY_RA_BASE_URL, DEFAULT_RA_BASE_URL)
+    }
+    set(value) = jsonWrite {
+        val normalized = value.trim().trimEnd('/')
+        if (normalized.isEmpty() || normalized == DEFAULT_RA_BASE_URL) {
+            remove(KEY_RA_BASE_URL)
+        } else {
+            put(KEY_RA_BASE_URL, normalized)
+        }
+    }
+    
     var releaseChannel: String
         get() = jsonRead { optString(KEY_RELEASE_CHANNEL, "STABLE") }
         set(value) = jsonWrite { put(KEY_RELEASE_CHANNEL, value) }
@@ -525,6 +538,8 @@ class SettingsRepository @Inject constructor(@ApplicationContext private val con
         private const val KEY_ROMM_DEVICE_CLIENT_VERSION = "romm_device_client_version"
         private const val KEY_ROMM_SAVE_SYNC_ENABLED = "romm_save_sync_enabled"
         private const val KEY_ROMM_SAVE_BACKUP_COUNT = "romm_save_backup_count"
+        const val DEFAULT_RA_BASE_URL = "https://retroachievements.org"
+        private const val KEY_RA_BASE_URL = "ra_base_url"
     }
 }
 
