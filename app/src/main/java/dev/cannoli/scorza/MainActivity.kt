@@ -714,6 +714,7 @@ class MainActivity : ComponentActivity(), ActivityActions {
     override fun startRaLogin(username: String, password: String) {
         val ra = RetroAchievementsManager(
             context = this,
+            baseUrlProvider = { settings.raBaseUrl },
             onLogin = { success, nameOrError, token ->
                 if (success && token != null) {
                     settings.raUsername = nameOrError
