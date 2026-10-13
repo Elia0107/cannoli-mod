@@ -2157,6 +2157,15 @@ class DialogInputHandler @Inject constructor(
             nav.dialogState.value = DialogState.None
             return
         }
+        if (state.gameName == "ra_server_url") {
+            val url = state.currentName.trim().trimEnd('/')
+            if (url.startsWith("https://") || url.startsWith("http://")) {
+                settings.raBaseUrl = url
+            }
+            settingsViewModel.refreshSubList()
+            nav.dialogState.value = DialogState.None
+            return
+        }
         if (state.gameName == "ra_login") {
             activityActions.startRaLogin(settings.raUsername, settingsViewModel.raPassword)
             nav.dialogState.value = DialogState.None
