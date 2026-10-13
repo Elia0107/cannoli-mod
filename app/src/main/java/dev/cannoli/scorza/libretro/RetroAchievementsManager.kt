@@ -20,7 +20,10 @@ class RetroAchievementsManager(
     private val onLogin: (success: Boolean, displayName: String, token: String?) -> Unit = { _, _, _ -> },
     private val onSyncStatus: (message: String) -> Unit = {},
     private val onDetectionReady: () -> Unit = {},
-    private val logger: (String) -> Unit = {}
+    private val logger: (String) -> Unit = {},
+    private val baseUrlProvider: () -> String = {
+        "https://retroachievements.org"
+    }
 ) {
     private val httpExecutor = Executors.newFixedThreadPool(2)
     private val mainHandler = Handler(Looper.getMainLooper())
