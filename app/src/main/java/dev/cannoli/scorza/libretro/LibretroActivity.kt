@@ -2764,6 +2764,7 @@ class LibretroActivity : ComponentActivity(), LauncherSettingsHost {
                     return@launch
                 }
                 val client = dev.cannoli.scorza.ra.RaConnectClient(
+                    baseUrlProvider = { settings.raBaseUrl },
                     userAgent = "Cannoli/${dev.cannoli.scorza.BuildConfig.VERSION_NAME}"
                 )
                 val result = dev.cannoli.scorza.ra.RaOfflinePreloader(client, store)
