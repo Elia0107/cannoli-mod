@@ -74,15 +74,6 @@ class SaveSyncService(
         return matcher.rommIdFor(tag, fileName)
     }
 
-    // Same checks as isSyncableGame, but says which one failed so the UI can explain itself.
-    fun syncBlockReason(gameKey: String): String? {
-        if (!syncEnabled()) return "Save Sync is off, or RomM is not paired."
-        if (!RommCapabilities.isSupported(connStore.serverVersion)) return "RomM server version is unknown or too old for Save Sync."
-        if (registrar.deviceId().isNullOrEmpty()) return "This device is not registered with RomM."
-        if (isSyncableGame(gameKey) == null) return "This game is not matched to a game on RomM."
-        return null
-    }
-
     private fun negotiate(romId: Int, slot: String, emulator: String?, local: LocalSave, anchor: SaveSyncRow?, deviceId: String): SyncNegotiateResponse? = try {
         client.negotiateSync(
             SyncNegotiatePayload(
