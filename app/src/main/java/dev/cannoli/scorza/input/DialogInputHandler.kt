@@ -1616,9 +1616,10 @@ class DialogInputHandler @Inject constructor(
     }
 
     private fun rommSavesOptions(rom: dev.cannoli.scorza.model.Rom): List<String> = buildList {
-        val gameKey = RomKeys.relativeKey(rom.path, romDir())
+        // val gameKey = RomKeys.relativeKey(rom.path, romDir())
         val base = java.text.Normalizer.normalize(rom.path.nameWithoutExtension, java.text.Normalizer.Form.NFC)
-        if (saveSyncService.isSyncableGame(gameKey) != null) add(MENU_SAVE_SLOTS)
+        // if (saveSyncService.isSyncableGame(gameKey) != null) add(MENU_SAVE_SLOTS)
+        add(MENU_SAVE_SLOTS)
         if (saveSyncService.listBackups(rom.platformTag, base).isNotEmpty()) add(MENU_RESTORE_BACKUP)
     }
 
@@ -1645,7 +1646,12 @@ class DialogInputHandler @Inject constructor(
 
     private fun openSaveSlotsForRom(rom: dev.cannoli.scorza.model.Rom) {
         val gameKey = RomKeys.relativeKey(rom.path, romDir())
-        val romId = saveSyncService.isSyncableGame(gameKey) ?: return
+        // val romId = saveSyncService.isSyncableGame(gameKey) ?: return
+        val romId = saveSyncService.isSyncableGame(gameKey) ?: run {
+            val reason = saveSyncService.syncBlockReason(gameKey) ?: "Save slots are not available for this game."
+            nav.dialogState.value = DialogState.LaunchError(reason)
+            return
+        }
         val tag = rom.platformTag
         val base = java.text.Normalizer.normalize(rom.path.nameWithoutExtension, java.text.Normalizer.Form.NFC)
         val emulator = RomKeys.coreDisplayNameFor(rom, platformResolver, gameOverrideStore.get(rom.id))
@@ -1972,7 +1978,8 @@ class DialogInputHandler @Inject constructor(
                     val raIdx = indexOfFirst { it == MENU_RA_GAME_ID || it.startsWith("$MENU_RA_GAME_ID\t") }
                     if (raIdx >= 0) add(raIdx + 1, item) else add(item)
                 }
-                if (item is ListItem.RomItem && rommSavesOptions(item.rom).isNotEmpty()) {
+                // if (item is ListItem.RomItem && rommSavesOptions(item.rom).isNotEmpty()) {
+                if (item is ListItem.RomItem) {
                     val idx = indexOf(MENU_RENAME)
                     if (idx >= 0) add(idx, MENU_ROMM_SAVES) else add(MENU_ROMM_SAVES)
                 }
