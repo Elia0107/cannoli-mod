@@ -1,4 +1,3 @@
-
 name: Build Cannoli Debug APK
 
 on:
@@ -19,10 +18,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Cannoli
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Checkout Kitchen frontend
+        uses: actions/checkout@v4
+        with:
+          repository: Elia0107/kitchen
+          path: kitchen
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -37,6 +42,27 @@ jobs:
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r27c
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Build Kitchen frontend
+        working-directory: kitchen
+        run: |
+          bun install --frozen-lockfile
+          bun run build
+
+      - name: Copy Kitchen assets
+        run: |
+          set -euo pipefail
+
+          test -f kitchen/dist/index.html
+          mkdir -p app/src/main/assets/kitchen
+          rm -rf app/src/main/assets/kitchen/*
+          cp -R kitchen/dist/. app/src/main/assets/kitchen/
+
+          test -f app/src/main/assets/kitchen/index.html
+          echo "Kitchen frontend copied successfully"
 
       - name: Download libretro cores
         run: |
@@ -69,8 +95,10 @@ jobs:
           chmod +x ./gradlew
           ./gradlew assembleDebug
 
-      - name: Verify bundled cores in APK
+      - name: Verify Kitchen and cores in APK
         run: |
+          set -euo pipefail
+
           APK="app/build/outputs/apk/debug/app-debug.apk"
 
           if [ ! -f "$APK" ]; then
@@ -78,6 +106,7 @@ jobs:
             exit 1
           fi
 
+          unzip -l "$APK" | grep -E 'assets/kitchen/index\.html'
           unzip -l "$APK" | grep -E 'lib/(arm64-v8a|armeabi-v7a)/.*_libretro_android\.so$'
 
       - name: Upload APK
