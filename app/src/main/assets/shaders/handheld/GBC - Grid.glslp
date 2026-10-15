@@ -1,0 +1,10 @@
+shaders = 1
+
+shader0 = shaders/PT_SkyWalker541.glsl
+filter_linear0 = false
+scale_type0 = viewport
+
+parameters = "PT_GAME_SYSTEM;PT_PIXEL_EFFECT;PT_GLARE_AND_SHEEN"
+PT_GAME_SYSTEM = 2
+PT_PIXEL_EFFECT = 1
+PT_GLARE_AND_SHEEN = 0
